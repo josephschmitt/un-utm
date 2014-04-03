@@ -1,5 +1,7 @@
 if (window.top === window) {
 	var getParams = function () {
+		if (!window.location.search) return null;
+
 		var query_string = {};
 		var query = window.location.search.substring(1);
 		var vars = query.split("&");
@@ -13,7 +15,7 @@ if (window.top === window) {
 			} 
 			// If second entry with this name
 			else if (typeof query_string[pair[0]] === "string") {
-				var arr = [ query_string[pair[0]], decodeURIComponent(pair[1]) ];
+				var arr = [query_string[pair[0]], decodeURIComponent(pair[1])];
 				query_string[pair[0]] = arr;
 			} 
 			// If third or later entry with this name
@@ -39,16 +41,17 @@ if (window.top === window) {
 	function doReplace() {
 		var params = getParams();
 		var utm_keys = ['utm_source', 'utm_medium', 'utm_term', 'utm_content', 'utm_campaign'];
-		utm_keys.forEach(function(key) {
-		  delete params[key];
-		});
+		if (params) {
+			utm_keys.forEach(function(key) {
+				delete params[key];
+			});
+		}
 
 		var query = serialize(params);
 		window.history.replaceState(params, null, window.location.origin + window.location.pathname + (query ? '?' + query : '') );
 	}
 
 	window.addEventListener('load', function() {
-		console.log("DO REPLACE");
 		doReplace();
 	});
 }
