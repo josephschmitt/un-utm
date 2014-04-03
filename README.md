@@ -1,0 +1,3 @@
+# Un-UTM
+
+This is a simple browser extension that cleans URLs be removing the ugly UTM tracking params from URLs. The params are removed after the page has loaded using the browser `window.history` API. This way, the page still gets its analytics information, we're simply just making the URL look prettier. Honestly, every site that implements UTM tracking should do this in their pages, but since that hasn't happened, here's a browser extension for it. If you have a page that implements UTM tracking, feel free to use the code in page.js on your own site.
