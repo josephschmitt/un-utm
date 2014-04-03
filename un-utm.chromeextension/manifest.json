@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+
+  "name": "Un-UTM",
+  "description": "Get rid of the ugly utm_source query params in your url bar.",
+  "version": "1.0",
+  "content_scripts": [{
+    "matches": ["http://*/*", "https://*/*"],
+    "js": ["page.js"]
+  }],
+  "permissions": [
+    "http://*/*",
+    "https://*/*"
+  ]
+}
