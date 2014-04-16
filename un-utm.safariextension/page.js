@@ -48,7 +48,7 @@ if (window.top === window) {
 		}
 
 		var query = serialize(params);
-		window.history.replaceState(params, null, window.location.origin + window.location.pathname + (query ? '?' + query : '') );
+		window.history.replaceState(params, null, window.location.origin + window.location.pathname + (query ? '?' + query : '') + window.location.hash);
 	}
 
 	window.addEventListener('load', function() {
