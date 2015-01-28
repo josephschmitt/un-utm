@@ -1,54 +1,34 @@
 if (window.top === window) {
-	var getParams = function () {
-		if (!window.location.search) return null;
+	function replaceUrlParam(url, paramName, paramValue){
+	    var pattern = new RegExp('('+paramName+'=).*?(&|$)');
+	    var newUrl = url;
 
-		var query_string = {};
-		var query = window.location.search.substring(1);
-		var vars = query.split("&");
-		var pair;
+	    if (url.search(pattern) >= 0){
+	        newUrl = url.replace(pattern, '$1' + paramValue + '$2');
 
-		for (var i=0;i<vars.length;i++) {
-			pair = vars[i].split("=");
-			// If first entry with this name
-			if (typeof query_string[pair[0]] === "undefined") {
-				query_string[pair[0]] = decodeURIComponent(pair[1]);
-			} 
-			// If second entry with this name
-			else if (typeof query_string[pair[0]] === "string") {
-				var arr = [query_string[pair[0]], decodeURIComponent(pair[1])];
-				query_string[pair[0]] = arr;
-			} 
-			// If third or later entry with this name
-			else {
-			  query_string[pair[0]].push(pair[1]);
-			}
-		}
-
-		return query_string;
-	};
-
-	var serialize = function(obj, prefix) {
-	  var str = [];
-	  for(var p in obj) {
-	    var k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
-	    str.push(typeof v == "object" ?
-	      serialize(v, k) :
-	      encodeURIComponent(k) + "=" + encodeURIComponent(v));
-	  }
-	  return str.join("&");
-	};
+	    	if (!paramValue) {
+	    		newUrl = newUrl.replace(new RegExp(paramName + '='), '').replace(/&&/, '&').replace(/\?&/, '?');
+	    	}
+	    }
+	    // No more url params
+	    if (newUrl.search(/(=).*?(&|$)/) < 0) {
+	    	newUrl = newUrl.replace(/\?/, '');
+	    }
+	    return newUrl;
+	}
 
 	function doReplace() {
-		var params = getParams();
 		var utm_keys = ['utm_source', 'utm_medium', 'utm_term', 'utm_content', 'utm_campaign'];
-		if (params) {
-			utm_keys.forEach(function(key) {
-				delete params[key];
-			});
-		}
+		var url = window.location.toString();
+		utm_keys.forEach(function(key) {
+			url = replaceUrlParam(url, key, '');
+		});
 
-		var query = serialize(params);
-		window.history.replaceState(params, null, window.location.origin + window.location.pathname + (query ? '?' + query : '') + window.location.hash);
+		if (!window.location.search) {
+	    	url = url.replace(/\?/, '');
+	    }
+	    
+		window.history.replaceState(null, null, url);
 	}
 
 	window.addEventListener('load', function() {

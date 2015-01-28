@@ -3,7 +3,7 @@
 
   "name": "Un-UTM",
   "description": "Get rid of the ugly utm_source query params in your url bar.",
-  "version": "1.0.1",
+  "version": "1.1",
   "content_scripts": [{
     "matches": ["http://*/*", "https://*/*"],
     "js": ["page.js"]
